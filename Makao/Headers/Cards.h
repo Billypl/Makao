@@ -11,11 +11,11 @@ public:
 
 	CardDeck cards;
 
-	static CardDeck generateDeck();
+	static CardDeck generateFullDeck();
 
-	void populateRandom(CardDeck& cards);
+	void drawCards(CardDeck& deck, int cardCount);
 	size_t findByID(size_t ID);
-	size_t findByCardSymbols(Card::Symbol symbol, Card::Figure figure);
+	size_t findCardBySymbol(Card::Symbol symbol, Card::Figure figure);
 
 };
 

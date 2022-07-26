@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Headers\console.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Souces\Card.cpp" />
     <ClCompile Include="Souces\Cards.cpp" />

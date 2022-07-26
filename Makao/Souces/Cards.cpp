@@ -8,7 +8,7 @@ using enum Card::Symbol;
 
 using namespace std;
 
-CardDeck Cards::generateDeck()
+CardDeck Cards::generateFullDeck()
 {
 	CardDeck cards;
 	for (auto const symbol : Card::symbols)
@@ -17,18 +17,14 @@ CardDeck Cards::generateDeck()
 	return cards;
 }
 
-void Cards::populateRandom(CardDeck& cards)
+void Cards::drawCards(CardDeck& deck, int cardCount)
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < cardCount; i++)
 	{
-		int x = random(0, cards.size());
-		this->cards.push_back(cards[x]);
-		cards.erase(cards.begin() + x);
+		int x = random::range(0, deck.size() - 1);
+		this->cards.push_back(deck[x]);
+		deck.erase(deck.begin() + x);
 	}
-
-	// ciekawy sposób
-	/*for (int& i : tab)
-		i = random(0, cards.size());*/
 }
 
 size_t Cards::findByID(size_t ID)
@@ -39,7 +35,7 @@ size_t Cards::findByID(size_t ID)
 	return -1;
 }
 
-size_t Cards::findByCardSymbols(Card::Symbol symbol, Card::Figure figure)
+size_t Cards::findCardBySymbol(Card::Symbol symbol, Card::Figure figure)
 {
 	for (int i = 0; i < cards.size(); i++)
 		if (cards[i].symbol == symbol && cards[i].figure == figure)

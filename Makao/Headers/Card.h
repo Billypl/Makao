@@ -1,5 +1,28 @@
 #pragma once
 #include <array>
+#include <string>
+
+// HACK: Symbole kart
+// czasami znaki specjalne nie wyświetlają się prawidłowo
+// zakomentować poniższą linijkę jeśli nie działa
+#define SYMBOLS
+
+#ifdef SYMBOLS 
+
+#define CLUBS		"♣"
+#define DIAMONDS	"♦"
+#define HEARTS		"♥"
+#define SPADES		"♠"
+
+#else
+
+#define CLUBS		"clubs"
+#define DIAMONDS	"diamonds"
+#define HEARTS		"hearts"
+#define SPADES		"spades"
+
+#endif
+
 
 class CardParams
 {
@@ -46,6 +69,13 @@ class Card : public CardParams
 
 public:
 
+	bool operator== (const Card& other) const;
+	//Card& operator= (const Card& other);
+	friend std::ostream& operator<< (std::ostream& cout, Figure figure);
+	friend std::ostream& operator<< (std::ostream& cout, Symbol symbol);
+	friend std::ostream& operator<< (std::ostream& cout, Card card);
+
+
 	size_t id;
 	Symbol symbol;
 	Figure figure;
@@ -54,9 +84,6 @@ public:
 	Card();
 	Card(const Card& card);
 	Card(Symbol symbol, Figure figure);
-
-	bool operator== (const Card& other) const;
-
 
 private:
 	size_t generateId();

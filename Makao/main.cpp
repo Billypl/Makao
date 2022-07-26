@@ -1,17 +1,15 @@
 #include <iostream>
 #include "Headers/Cards.h"
+#include "Headers/includes.h"
 
 using namespace std;
 
+using enum Card::Figure;
+using enum Card::Symbol;
 
 int main()
 {
-    srand(time(NULL));
-    Cards table;
-    table.cards = Cards::generateDeck();
-    Cards c1;
-    c1.populateRandom(table.cards);
-
+    random rng;
 
     cout << "Works?";
 }
