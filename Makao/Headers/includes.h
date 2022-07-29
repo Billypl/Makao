@@ -3,14 +3,19 @@
 // pomiędzy plikami są tutaj
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 
 #include "Card.h"
 #include "console.h"
+
+typedef std::vector<Card> CardDeck;
 
 typedef Card::Color Color;
 typedef Card::Symbol Symbol;
 typedef Card::Figure Figure;
 
+using enum Card::Figure;
+using enum Card::Symbol;
 
 // definicja w Card.cpp
 std::ostream& operator<< (std::ostream& cout, Figure figure);

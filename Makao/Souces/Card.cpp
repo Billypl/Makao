@@ -11,12 +11,6 @@ Color Card::determineColor(Symbol symbol)
 		return Color::red;
 }
 
-Card::Card(Symbol symbol, Figure figure)
-	: symbol(symbol), figure(figure) 
-{
-	color = determineColor(symbol);
-	id = generateId();
-}
 
 size_t Card::generateId()
 {
@@ -24,8 +18,14 @@ size_t Card::generateId()
 	return id;
 }
 
-
 Card::Card() {}
+
+Card::Card(Symbol symbol, Figure figure)
+	: symbol(symbol), figure(figure) 
+{
+	color = determineColor(symbol);
+	id = generateId();
+}
 
 Card::Card(const Card& card)
 	: Card(card.symbol, card.figure) {}
@@ -34,13 +34,6 @@ bool Card::operator== (const Card& other) const
 {
 	return (this->id == other.id);
 }
-
-//Card& Card::operator=(const Card& other)
-//	: Card(this.)
-//{
-//}
-
-
 
 std::ostream& operator<<(std::ostream& cout, Figure figure)
 {

@@ -1,15 +1,16 @@
 #include <iostream>
-#include "Headers/Cards.h"
+#include "Headers/Game.h"
 #include "Headers/includes.h"
+#include "Headers/Player.h"
 
 using namespace std;
-
-using enum Card::Figure;
-using enum Card::Symbol;
 
 int main()
 {
     random rng;
+
+    Game game;
+    game.startGame();
 
     cout << "Works?";
 }

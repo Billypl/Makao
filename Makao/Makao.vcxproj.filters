@@ -24,11 +24,17 @@
     <ClCompile Include="Souces\Draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Souces\Cards.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Headers\console.h">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Souces\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Souces\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Souces\Turn.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,7 +47,16 @@
     <ClInclude Include="Headers\Draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Cards.h">
+    <ClInclude Include="Headers\options.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Turn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

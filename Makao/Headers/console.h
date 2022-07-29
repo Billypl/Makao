@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdlib>
+#include "options.h"
 
 // HACK: Kolory
 // Nie można używać biblioteki "windows.h",
@@ -7,8 +8,8 @@
 // również potrafią zmieniać kolory
 
 // nie zawsze działają i czasami w konsoli pojawiają
-// się dziwne znaczki, jeśli nie, zakomentować poniższą linijkę
-#define COLORS
+// się dziwne znaczki, jeśli nie
+// zakomentować odpowiednią opcję w "options.h"
 
 #ifdef COLORS
 

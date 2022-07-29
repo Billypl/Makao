@@ -1,11 +1,11 @@
 #pragma once
 #include <array>
 #include <string>
+#include "options.h"
 
 // HACK: Symbole kart
 // czasami znaki specjalne nie wyświetlają się prawidłowo
-// zakomentować poniższą linijkę jeśli nie działa
-#define SYMBOLS
+// zakomentować odpowiednią opcję w pliku "options.h"
 
 #ifdef SYMBOLS 
 
@@ -70,7 +70,6 @@ class Card : public CardParams
 public:
 
 	bool operator== (const Card& other) const;
-	//Card& operator= (const Card& other);
 	friend std::ostream& operator<< (std::ostream& cout, Figure figure);
 	friend std::ostream& operator<< (std::ostream& cout, Symbol symbol);
 	friend std::ostream& operator<< (std::ostream& cout, Card card);
@@ -82,8 +81,8 @@ public:
 	Color color;
 
 	Card();
-	Card(const Card& card);
-	Card(Symbol symbol, Figure figure);
+	Card(const Card& card); // konstruktor kopiujący
+	Card(Symbol symbol, Figure figure); 
 
 private:
 	size_t generateId();
