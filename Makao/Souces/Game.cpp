@@ -1,4 +1,5 @@
 #include "../Headers/Game.h"
+#include <string>
 using namespace std;
 
 int Game::PLAYERS_NUMBER;
@@ -11,10 +12,10 @@ void Game::startGame()
 
 void Game::setupGame()
 {
-	cout << "Welcome to makao game! \n";
+    print(GREEN_F, "Welcome to makao game! \n");
 	/*DEBUG*/ PLAYERS_NUMBER = 2;
-	//PLAYERS_NUMBER = waitForPlayersNumber();
-    table = Game::generateFullDeck();
+	PLAYERS_NUMBER = waitForPlayersNumber();
+    deck = Game::generateFullDeck();
     players = createPlayers();
 }
 
@@ -45,7 +46,7 @@ vector<Player> Game::createPlayers()
     for(int i = 0; i < PLAYERS_NUMBER; i++)
     {
         Player player;
-        player.drawCards(table, STARTING_CARDS_NUMBER);
+        player.drawCards(deck, STARTING_CARDS_NUMBER);
 	    players.push_back(player);
     }
     return players;
@@ -65,8 +66,8 @@ void Game::startGameLoop()
     while(true)
     {
         string command = waitForUserCommand(); 
+        chooseCommandFunc(command);
 
-        turn.nextTurn();
     }
 }
 
@@ -75,11 +76,97 @@ string Game::waitForUserCommand()
     string command;
     while(true)
     {
-        cout << "Choose from commands: quit | play | cheat | makao: ";
+        cout << "Choose from commands: | quit | play | cheat | makao | end |: ";
         cin >> command;
-        if (command == "quit" || command == "play" || command == "cheat" || command == "makao")
-            return command;
-        cout << "Wrong command! Try again \n";
+        for(auto commandName : commands)
+        {
+            if(command == commandName)
+            {
+                cls();
+                return command;
+            }
+        }
+        cls();
+        print(RED_F, "Wrong command! Try again \n");
+    }
+}
+
+void Game::chooseCommandFunc(string command)
+{
+    if (command == "quit") quit();
+    if (command == "cheat")
+    {
+        cheat();
+        return;
+    }
+    if (command == "makao")
+    {
+        makao();
+        return;
+    }
+    //TODO: finish play command
+    if (command == "play")
+    {
+        play();
+        return;
+    }
+    //TODO: finish end command
+    if (command == "end")
+    {
+        turn.nextTurn();
+        return;
+    }
+
+}
+
+void Game::quit() { exit(0); }
+
+void Game::play()
+{
+    printTable();
+}
+
+void Game::cheat()
+{
+    printCheatTable();
+}
+
+void Game::makao()
+{
+    if (turn.isCardPlaced == false)
+    {
+        print(RED_F, "Place card first! \n");
+        return;
+    }
+    turn.saidMakao = true;
+}
+
+void Game::printTable()
+{
+    for (int i = 0; i < PLAYERS_NUMBER; i++)
+    {
+        string indicator = "Player " + to_string(i + 1) + ": ";
+        if (turn.currentPlayer == i)
+        {
+			print(MAGENTA_F, indicator);
+            players[i].printCards();
+            cout << endl;
+            continue;
+        }
+        cout << indicator;
+        players[i].printCoveredCards();
+        cout << endl;
+    }
+}
+
+void Game::printCheatTable()
+{
+    for (int i = 0; i < PLAYERS_NUMBER; i++)
+    {
+        string indicator = "Player " + to_string(i + 1) + ": ";
+        cout << indicator;
+    	players[i].printCards();
+        cout << endl;
     }
 }
 

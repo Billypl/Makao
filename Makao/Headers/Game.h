@@ -3,15 +3,19 @@
 #include <iostream>
 #include "Player.h"
 #include "Turn.h"
-#include  <string>
+#include <string>
+#include <array>
 
 const int STARTING_CARDS_NUMBER = 5;
+const std::string PLAYER_CARDS_INDICATOR_GAP = "          ";
 
 class Game
 {
 	std::vector<Player> players;
-	CardDeck table;
+	CardDeck deck;
+	CardDeck cardsOnTable;
 	Turn turn;
+	std::array<std::string, 5> commands = { "quit", "play", "cheat", "makao", "end" };
 
 public:
 
@@ -28,5 +32,13 @@ private:
 	std::string waitForUserCommand();
 	void chooseCommandFunc(std::string command);
 
+	void quit();
+	void cheat();
+	void play();
+	void makao();
+
+	void printTable();
+	void printCheatTable();
+	
 };
 

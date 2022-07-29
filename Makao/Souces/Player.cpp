@@ -1,6 +1,7 @@
 #include "../Headers/Player.h"
+#include "../Headers/Game.h"
 #include "../Headers/includes.h"
-
+using namespace std;
 
 void Player::drawCards(CardDeck& deck, int cardCount)
 {
@@ -26,4 +27,35 @@ size_t Player::findCardBySymbol(Card::Symbol symbol, Card::Figure figure)
 		if (cards[i].symbol == symbol && cards[i].figure == figure)
 			return i;
 	return -1;
+}
+
+void Player::printCards()
+{
+	printUpperOfCards();
+	cout << PLAYER_CARDS_INDICATOR_GAP;
+	printBottomOfCards();
+}
+
+void Player::printCoveredCards()
+{
+	printBottomOfCards();
+	cout << PLAYER_CARDS_INDICATOR_GAP;
+	printBottomOfCards();
+}
+
+void Player::printUpperOfCards()
+{
+	for (const auto& card : cards)
+		cout << card << " ";
+	cout << endl;
+}
+
+void Player::printBottomOfCards()
+{
+	for (const auto& card : cards)
+	{
+		print(WHITE_B, "   ");
+		cout << " ";
+	}
+	cout << endl;
 }

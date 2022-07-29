@@ -41,31 +41,31 @@ std::ostream& operator<<(std::ostream& cout, Figure figure)
 	switch(figure)
 	{
 		case _2:
-			cout << "_2";
+			cout << "2";
 			break;
 		case _3:
-			cout << "_3";
+			cout << "3";
 			break;
 		case _4:
-			cout << "_4";
+			cout << "4";
 			break;
 		case _5:
-			cout << "_5";
+			cout << "5";
 			break;
 		case _6:
-			cout << "_6";
+			cout << "6";
 			break;
 		case _7:
-			cout << "_7";
+			cout << "7";
 			break;
 		case _8:
-			cout << "_8";
+			cout << "8";
 			break;
 		case _9:
-			cout << "_9";
+			cout << "9";
 			break;
 		case _10:
-			cout << "_10";
+			cout << "10";
 			break;
 		case J:
 			cout << "J";
@@ -112,7 +112,13 @@ std::ostream& operator<<(std::ostream& cout, Card card)
 	else
 		COLOR = WHITE_B RED_F;
 
-	cout << COLOR << card.figure  << card.symbol << DEFAULT_B DEFAULT_F;
+	if(card.figure == _10)
+	{
+		cout << COLOR << card.figure << card.symbol << DEFAULT_B DEFAULT_F;
+	}
+	else
+		cout << COLOR << " " << card.figure << card.symbol << DEFAULT_B DEFAULT_F;
+
 	return cout;
 }
 

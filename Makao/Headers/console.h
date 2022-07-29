@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdlib>
 #include "options.h"
+#include <string>
+#include <iostream>
 
 // HACK: Kolory
 // Nie można używać biblioteki "windows.h",
@@ -59,6 +61,6 @@
 
 #endif
 
-
+inline void print(std::string color, std::string content) { std::cout << color << content << DEFAULT_B DEFAULT_F; }
 inline void cls() { system("cls||clear"); }
 
