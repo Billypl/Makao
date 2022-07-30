@@ -15,7 +15,7 @@ class Game
 	CardDeck deck;
 	CardDeck cardsOnTable;
 	Turn turn;
-	std::array<std::string, 5> commands = { "quit", "play", "cheat", "makao", "end" };
+	std::array<std::string, 6> commands = { "quit", "play", "cheat", "makao", "end", "draw"};
 
 public:
 
@@ -35,6 +35,7 @@ public:
 	//std::string waitForCardToChoose();
 	void makao();
 	void end();
+	void draw();
 
 private:
 
@@ -57,5 +58,6 @@ private:
 	int waitForCardNumber();
 	bool canANYcardBePlaced();
 
+	void shuffleDeck();
 };
 

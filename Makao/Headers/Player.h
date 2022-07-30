@@ -16,9 +16,9 @@ public:
 
 	void printCards();
 	void printCoveredCards();
+	bool didWin();
 
 	Player() {}
-	//Player(const Player& other) //copy constructor
 
 private:
 

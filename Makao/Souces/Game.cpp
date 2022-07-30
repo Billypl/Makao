@@ -139,10 +139,11 @@ void Game::startGameLoop()
 {
     while(true)
     {
+        if (getCurrentPlayer().didWin())
+            turn.nextTurn();
         cls();
         string command = waitForUserCommand(); 
         chooseCommandFunc(command);
-
     }
 }
 
@@ -152,7 +153,7 @@ string Game::waitForUserCommand()
     while(true)
     {
         printTable();
-        cout << "Choose from commands: | quit | play | cheat | makao | end | : ";
+        cout << "Choose from commands: | quit | play | cheat | makao | end | draw | : ";
         cin >> command;
         for(auto commandName : commands)
         {
@@ -192,8 +193,14 @@ void Game::chooseCommandFunc(string command)
         end();
         return;
     }
+    if(command == "draw")
+    {
+        draw();
+        return;
+    }
 
 }
+
 
 void Game::quit() { exit(0); }
 
@@ -202,7 +209,6 @@ void Game::play()
     const int cardNumberToPutOnTable = waitForCardNumber();
     if (cardNumberToPutOnTable == -1)
         return;
-
     
     const Card pickedCard = getCurrentPlayer().cards[cardNumberToPutOnTable-1];
     cardsOnTable.push_back(pickedCard);
@@ -233,6 +239,7 @@ int Game::waitForCardNumber()
             print(RED_F, "This card can't be placed! Choose another\n");
     }
 }
+
 bool Game::canANYcardBePlaced()
 {
 	for (const auto& card : getCurrentPlayer().cards)
@@ -274,18 +281,35 @@ void Game::makao()
     turn.saidMakao = true;
 }
 
+void Game::draw()
+{
+    getCurrentPlayer().drawCards(deck, 1);
+}
+
 void Game::end()
 {
+	resetCardsState();
     if (turn.isCardPlaced == false)
+    {
+        if (deck.empty())
+            shuffleDeck();
         getCurrentPlayer().drawCards(deck, 1);
+    }
 
     else if (turn.saidMakao == false && getCurrentPlayer().cards.size() == 1)
     {
+        if (deck.size() < 5)
+            shuffleDeck();
         getCurrentPlayer().drawCards(deck, 5);
         //print(RED_F, "You didn't say makao! Drawed 5 cards \n");
     }
-
-	resetCardsState();
     turn.nextTurn();
 }
+
+void Game::shuffleDeck()
+{
+    deck.insert(deck.end(), cardsOnTable.begin(), cardsOnTable.end() - 1);
+	cardsOnTable.erase(cardsOnTable.begin(), cardsOnTable.end() - 1);
+}
+
 

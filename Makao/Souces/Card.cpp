@@ -1,6 +1,7 @@
 #include "../Headers/includes.h"
 #include <iostream>
 
+class Turn;
 using namespace std;
 
 Color Card::determineColor(Symbol symbol)
@@ -26,6 +27,7 @@ Card::Card(Symbol symbol, Figure figure)
 	color = determineColor(symbol);
 	id = generateId();
 }
+
 
 Card::Card(const Card& card)
 	: Card(card.symbol, card.figure) {}

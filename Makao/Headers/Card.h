@@ -2,6 +2,9 @@
 #include <array>
 #include <string>
 #include "options.h"
+#include <vector>
+
+#include "Turn.h"
 
 // HACK: Symbole kart
 // czasami znaki specjalne nie wyświetlają się prawidłowo

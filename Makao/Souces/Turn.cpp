@@ -5,12 +5,13 @@ void Turn::nextTurn()
 {
 	isCardPlaced = false;
 	saidMakao = false;
+	hasDrawedCard = false;
 	incrementCurrentPlayerNumber();
 	cls();
 }
 
 Turn::Turn()
-	: currentPlayer(0), isCardPlaced(false), saidMakao(false)  {}
+	: currentPlayer(0), isCardPlaced(false), saidMakao(false), hasDrawedCard(false)  {}
 
 void Turn::incrementCurrentPlayerNumber()
 {
