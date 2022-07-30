@@ -21,7 +21,7 @@ size_t Card::generateId()
 Card::Card() {}
 
 Card::Card(Symbol symbol, Figure figure)
-	: symbol(symbol), figure(figure) 
+	: symbol(symbol), figure(figure), canBePlaced(true)
 {
 	color = determineColor(symbol);
 	id = generateId();
@@ -104,18 +104,21 @@ std::ostream& operator<<(std::ostream& cout, Symbol symbol)
 	return cout;
 }
 
-std::ostream& operator<<(std::ostream& cout, Card card)
+std::ostream& operator<<(std::ostream& cout, const Card& card)
 {
 	string COLOR;
-	if (card.color == Color::black)
-		COLOR = WHITE_B BLACK_F;
+	if (card.canBePlaced)
+		COLOR = WHITE_B;
 	else
-		COLOR = WHITE_B RED_F;
+		COLOR = GRAY_B;
+
+	if (card.color == Color::black)
+		COLOR += BLACK_F;
+	else
+		COLOR += RED_F;
 
 	if(card.figure == _10)
-	{
 		cout << COLOR << card.figure << card.symbol << DEFAULT_B DEFAULT_F;
-	}
 	else
 		cout << COLOR << " " << card.figure << card.symbol << DEFAULT_B DEFAULT_F;
 

@@ -6,6 +6,9 @@ int Game::PLAYERS_NUMBER;
 
 void Game::printTable()
 {
+    resetCardsState();
+    grayOutCardsCannotBePlaced();
+    printTableCard();
     for (int i = 0; i < PLAYERS_NUMBER; i++)
     {
         string indicator = "Player " + to_string(i + 1) + ": ";
@@ -24,6 +27,8 @@ void Game::printTable()
 
 void Game::printCheatTable()
 {
+
+    printTableCard();
     for (int i = 0; i < PLAYERS_NUMBER; i++)
     {
         string indicator = "Player " + to_string(i + 1) + ": ";
@@ -32,6 +37,14 @@ void Game::printCheatTable()
         cout << endl;
     }
 }
+
+void Game::printTableCard()
+{
+    const string BORDER_GAP = "\t\t";
+    cout << "\n\n" << BORDER_GAP << cardsOnTable.back() << endl << BORDER_GAP;
+    print(WHITE_B, "   \n\n\n\n");
+}
+
 
 void Game::startGame()
 {
@@ -44,6 +57,7 @@ void Game::setupGame()
     print(GREEN_F, "Welcome to makao game! \n");
 	PLAYERS_NUMBER = waitForPlayersNumber();
     deck = Game::generateFullDeck();
+    cardsOnTable.push_back(drawRandomStartingCard());
     players = createPlayers();
 }
 
@@ -68,6 +82,15 @@ int Game::waitForPlayersNumber()
     }
 }
 
+CardDeck Game::generateFullDeck()
+{
+    CardDeck cards;
+    for (auto const symbol : Card::symbols)
+        for (auto const figure : Card::figures)
+            cards.push_back(Card(symbol, figure));
+    return cards;
+}
+
 vector<Player> Game::createPlayers()
 {
     vector<Player> players;
@@ -80,14 +103,31 @@ vector<Player> Game::createPlayers()
     return players;
 }
 
-CardDeck Game::generateFullDeck()
+Card Game::drawRandomStartingCard()
 {
-    CardDeck cards;
-    for (auto const symbol : Card::symbols)
-        for (auto const figure : Card::figures)
-            cards.push_back(Card(symbol, figure));
-    return cards;
+    Card randomCard;
+    while(true)
+    {
+        const int randomCardNumber = random::range(0, deck.size());
+        randomCard = deck[randomCardNumber];
+    	if(isSpecialCard(randomCard))
+    		continue;
+        deck.erase(next(deck.begin(), randomCardNumber));
+        break;
+    }
+	return randomCard;
 }
+
+#include <ranges>
+
+bool Game::isSpecialCard(Card randomCard)
+{
+    for (auto specialCard : CardParams::specialCards)
+        if (randomCard.figure == specialCard)
+            return true;
+    return false;
+}
+
 
 void Game::startGameLoop()
 {
@@ -154,8 +194,37 @@ void Game::quit() { exit(0); }
 void Game::play()
 {
     turn.isCardPlaced = true;
+
+    const Card pickedCard = players[turn.currentPlayer].cards.back();
+    cardsOnTable.push_back(pickedCard);
 	players[turn.currentPlayer].cards.pop_back();
 }
+
+void Game::grayOutCardsCannotBePlaced()
+{
+    for(auto& card : players[turn.currentPlayer].cards)
+    {
+        if(!canCardBePlaced(card))
+    		card.canBePlaced = false;
+    }
+}
+
+bool Game::canCardBePlaced(Card& card)
+{
+    if (cardsOnTable.back().figure == card.figure ||
+        cardsOnTable.back().symbol == card.symbol ||
+        cardsOnTable.back().figure == Q)
+        return true;
+    else 
+        return false;
+}
+
+void Game::resetCardsState()
+{
+	for(auto& card : players[turn.currentPlayer].cards)
+        card.canBePlaced = true;
+}
+
 
 void Game::cheat()
 {
@@ -175,18 +244,15 @@ void Game::makao()
 void Game::end()
 {
     if (turn.isCardPlaced == false)
-    {
         players[turn.currentPlayer].drawCards(deck, 1);
-    	turn.nextTurn();
-        return;
-    }
-    if (turn.saidMakao == false && players[turn.currentPlayer].cards.size() == 1)
+
+    else if (turn.saidMakao == false && players[turn.currentPlayer].cards.size() == 1)
     {
         players[turn.currentPlayer].drawCards(deck, 5);
-        turn.nextTurn();
-        print(RED_F, "You didn't say makao! Drawed 5 cards \n");
-        return;
+        //print(RED_F, "You didn't say makao! Drawed 5 cards \n");
     }
+
+	resetCardsState();
     turn.nextTurn();
 }
 

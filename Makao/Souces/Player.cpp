@@ -29,6 +29,11 @@ size_t Player::findCardBySymbol(Card::Symbol symbol, Card::Figure figure)
 	return -1;
 }
 
+size_t Player::findCard(Card card)
+{
+	return findCardBySymbol(card.symbol, card.figure);
+}
+
 void Player::printCards()
 {
 	printUpperOfCards();
@@ -54,7 +59,10 @@ void Player::printBottomOfCards()
 {
 	for (const auto& card : cards)
 	{
-		print(WHITE_B, "   ");
+		if(card.canBePlaced)
+			print(WHITE_B, "   ");
+		else
+			print(GRAY_B, "   ");
 		cout << " ";
 	}
 	cout << endl;

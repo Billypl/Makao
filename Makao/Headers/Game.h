@@ -35,16 +35,22 @@ public:
 
 private:
 
+	void printTableCard();
+
 	void setupGame();
 	int waitForPlayersNumber();
-	std::vector<Player> createPlayers();
 	static CardDeck generateFullDeck();
+	std::vector<Player> createPlayers();
+	Card drawRandomStartingCard();
+	bool isSpecialCard(Card randomCard);
 	void startGameLoop();
+
 	std::string waitForUserCommand();
 	void chooseCommandFunc(std::string command);
-
 	
-
+	void grayOutCardsCannotBePlaced();
+	bool canCardBePlaced(Card& card);
+	void resetCardsState();
 	
 };
 

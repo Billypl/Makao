@@ -20,7 +20,7 @@ using enum Card::Symbol;
 // definicja w Card.cpp
 std::ostream& operator<< (std::ostream& cout, Figure figure);
 std::ostream& operator<< (std::ostream& cout, Symbol symbol);
-std::ostream& operator<< (std::ostream& cout, Card card);
+std::ostream& operator<< (std::ostream& cout, const Card& card);
 
 class random
 {

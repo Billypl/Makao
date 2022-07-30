@@ -16,10 +16,10 @@
 
 #else
 
-#define CLUBS		"clubs"
-#define DIAMONDS	"diamonds"
-#define HEARTS		"hearts"
-#define SPADES		"spades"
+#define CLUBS		"_c"
+#define DIAMONDS	"_d"
+#define HEARTS		"_h"
+#define SPADES		"_s"
 
 #endif
 
@@ -62,6 +62,9 @@ public:
 		black,
 		red
 	};
+
+	static inline std::array<Figure, 7> specialCards = { _2,_3,_4,J,Q,K,A };
+
 };
 
 class Card : public CardParams
@@ -72,13 +75,13 @@ public:
 	bool operator== (const Card& other) const;
 	friend std::ostream& operator<< (std::ostream& cout, Figure figure);
 	friend std::ostream& operator<< (std::ostream& cout, Symbol symbol);
-	friend std::ostream& operator<< (std::ostream& cout, Card card);
-
+	friend std::ostream& operator<< (std::ostream& cout, const Card& card);
 
 	size_t id;
 	Symbol symbol;
 	Figure figure;
 	Color color;
+	bool canBePlaced;
 
 	Card();
 	Card(const Card& card); // konstruktor kopiujący

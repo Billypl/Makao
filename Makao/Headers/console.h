@@ -37,6 +37,19 @@
 #define WHITE_B		"\x1b[47m"
 #define DEFAULT_B	"\x1b[49m"
 
+#define GRAY_B 		"\033[0;100m"
+
+// JASNE KOLORY TŁA
+#define BLACK_B_BRIGHT 		"\033[0;100m"
+#define RED_B_BRIGHT 		"\033[0;101m"
+#define GREEN_B_BRIGHT 		"\033[0;102m"
+#define YELLOW_B_BRIGHT 	"\033[0;103m"
+#define BLUE_B_BRIGHT 		"\033[0;104m"
+#define PURPLE_B_BRIGHT 	"\033[0;105m"
+#define CYAN_B_BRIGHT 		"\033[0;106m"
+#define WHITE_B_BRIGHT		"\033[0;107m"
+
+
 #else
 
 #define BLACK_F		""
@@ -58,6 +71,17 @@
 #define CYAN_B		""
 #define WHITE_B		""
 #define DEFAULT_B	""
+
+#define GRAY_B 		""
+
+#define BLACK_B_BRIGHT 		""
+#define RED_B_BRIGHT 		""
+#define GREEN_B_BRIGHT 		""
+#define YELLOW_B_BRIGHT 	""
+#define BLUE_B_BRIGHT 		""
+#define PURPLE_B_BRIGHT 	""
+#define CYAN_B_BRIGHT 		""
+#define WHITE_B_BRIGHT		""
 
 #endif
 

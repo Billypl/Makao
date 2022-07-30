@@ -12,6 +12,7 @@ public:
 
 	size_t findCardByID(size_t ID);
 	size_t findCardBySymbol(Card::Symbol symbol, Card::Figure figure);
+	size_t findCard(Card card);
 
 	void printCards();
 	void printCoveredCards();
