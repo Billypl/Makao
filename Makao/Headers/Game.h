@@ -22,6 +22,17 @@ public:
 	static int PLAYERS_NUMBER;
 	void startGame();
 
+	void printTable();
+	void printCheatTable();
+
+	void quit();
+	void cheat();
+	void play();
+
+	//std::string waitForCardToChoose();
+	void makao();
+	void end();
+
 private:
 
 	void setupGame();
@@ -32,13 +43,8 @@ private:
 	std::string waitForUserCommand();
 	void chooseCommandFunc(std::string command);
 
-	void quit();
-	void cheat();
-	void play();
-	void makao();
+	
 
-	void printTable();
-	void printCheatTable();
 	
 };
 

@@ -6,6 +6,7 @@ void Turn::nextTurn()
 	isCardPlaced = false;
 	saidMakao = false;
 	incrementCurrentPlayerNumber();
+	cls();
 }
 
 Turn::Turn()

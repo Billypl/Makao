@@ -4,6 +4,35 @@ using namespace std;
 
 int Game::PLAYERS_NUMBER;
 
+void Game::printTable()
+{
+    for (int i = 0; i < PLAYERS_NUMBER; i++)
+    {
+        string indicator = "Player " + to_string(i + 1) + ": ";
+        if (turn.currentPlayer == i)
+        {
+            print(MAGENTA_F, indicator);
+            players[i].printCards();
+            cout << endl;
+            continue;
+        }
+        cout << indicator;
+        players[i].printCoveredCards();
+        cout << endl;
+    }
+}
+
+void Game::printCheatTable()
+{
+    for (int i = 0; i < PLAYERS_NUMBER; i++)
+    {
+        string indicator = "Player " + to_string(i + 1) + ": ";
+        cout << indicator;
+        players[i].printCards();
+        cout << endl;
+    }
+}
+
 void Game::startGame()
 {
 	setupGame();
@@ -13,7 +42,6 @@ void Game::startGame()
 void Game::setupGame()
 {
     print(GREEN_F, "Welcome to makao game! \n");
-	/*DEBUG*/ PLAYERS_NUMBER = 2;
 	PLAYERS_NUMBER = waitForPlayersNumber();
     deck = Game::generateFullDeck();
     players = createPlayers();
@@ -65,6 +93,7 @@ void Game::startGameLoop()
 {
     while(true)
     {
+        cls();
         string command = waitForUserCommand(); 
         chooseCommandFunc(command);
 
@@ -76,7 +105,8 @@ string Game::waitForUserCommand()
     string command;
     while(true)
     {
-        cout << "Choose from commands: | quit | play | cheat | makao | end |: ";
+        printTable();
+        cout << "Choose from commands: | quit | play | cheat | makao | end | : ";
         cin >> command;
         for(auto commandName : commands)
         {
@@ -87,7 +117,7 @@ string Game::waitForUserCommand()
             }
         }
         cls();
-        print(RED_F, "Wrong command! Try again \n");
+        print(RED_F, "Wrong command! Try again \n\n");
     }
 }
 
@@ -104,16 +134,16 @@ void Game::chooseCommandFunc(string command)
         makao();
         return;
     }
-    //TODO: finish play command
+    // TODO: finish play command
     if (command == "play")
     {
         play();
         return;
     }
-    //TODO: finish end command
+    // TODO: finish end command
     if (command == "end")
     {
-        turn.nextTurn();
+        end();
         return;
     }
 
@@ -123,50 +153,40 @@ void Game::quit() { exit(0); }
 
 void Game::play()
 {
-    printTable();
+    turn.isCardPlaced = true;
+	players[turn.currentPlayer].cards.pop_back();
 }
 
 void Game::cheat()
 {
     printCheatTable();
+    cout << "Type \"back\" to get back to normal view: ";
+    string trash;
+    cin >> trash;
 }
 
 void Game::makao()
 {
     if (turn.isCardPlaced == false)
-    {
-        print(RED_F, "Place card first! \n");
         return;
-    }
     turn.saidMakao = true;
 }
 
-void Game::printTable()
+void Game::end()
 {
-    for (int i = 0; i < PLAYERS_NUMBER; i++)
+    if (turn.isCardPlaced == false)
     {
-        string indicator = "Player " + to_string(i + 1) + ": ";
-        if (turn.currentPlayer == i)
-        {
-			print(MAGENTA_F, indicator);
-            players[i].printCards();
-            cout << endl;
-            continue;
-        }
-        cout << indicator;
-        players[i].printCoveredCards();
-        cout << endl;
+        players[turn.currentPlayer].drawCards(deck, 1);
+    	turn.nextTurn();
+        return;
     }
-}
-
-void Game::printCheatTable()
-{
-    for (int i = 0; i < PLAYERS_NUMBER; i++)
+    if (turn.saidMakao == false && players[turn.currentPlayer].cards.size() == 1)
     {
-        string indicator = "Player " + to_string(i + 1) + ": ";
-        cout << indicator;
-    	players[i].printCards();
-        cout << endl;
+        players[turn.currentPlayer].drawCards(deck, 5);
+        turn.nextTurn();
+        print(RED_F, "You didn't say makao! Drawed 5 cards \n");
+        return;
     }
+    turn.nextTurn();
 }
 
