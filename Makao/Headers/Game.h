@@ -59,5 +59,8 @@ private:
 	bool canANYcardBePlaced();
 
 	void shuffleDeck();
+
+	void drawCardIfHavent();
+	void drawFiveCardsIfNotMakao();
 };
 

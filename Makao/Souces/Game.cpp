@@ -124,8 +124,6 @@ Card Game::drawRandomStartingCard()
 	return randomCard;
 }
 
-#include <ranges>
-
 bool Game::isSpecialCard(Card randomCard)
 {
     for (auto specialCard : CardParams::specialCards)
@@ -233,7 +231,7 @@ int Game::waitForCardNumber()
             continue;
         }
 
-        if (getCurrentPlayer().cards[cardNumber - 1].canCardBePlaced(cardsOnTable) == true)
+        if (getCurrentPlayer().cards[cardNumber - 1].canCardBePlaced(cardsOnTable, turn) == true)
             return cardNumber;
         else
             print(RED_F, "This card can't be placed! Choose another\n");
@@ -255,7 +253,7 @@ void Game::grayOutCardsCannotBePlaced()
 {
     for(auto& card : getCurrentPlayer().cards)
     {
-        if(!card.canCardBePlaced(cardsOnTable))
+        if(!card.canCardBePlaced(cardsOnTable, turn))
     		card.canBePlaced = false;
     }
 }
@@ -283,27 +281,41 @@ void Game::makao()
 
 void Game::draw()
 {
-    getCurrentPlayer().drawCards(deck, 1);
+    if(turn.isCardPlaced == false && turn.hasDrawedCard == false)
+    {
+        turn.hasDrawedCard = true;
+		getCurrentPlayer().drawCards(deck, 1);
+    }
 }
 
+// finish play command //canPlaceCard
 void Game::end()
 {
 	resetCardsState();
-    if (turn.isCardPlaced == false)
+    drawCardIfHavent();
+    drawFiveCardsIfNotMakao();
+    turn.nextTurn();
+}
+
+void Game::drawCardIfHavent()
+{
+    if (turn.isCardPlaced == false && turn.hasDrawedCard == false)
     {
         if (deck.empty())
             shuffleDeck();
         getCurrentPlayer().drawCards(deck, 1);
     }
+}
 
-    else if (turn.saidMakao == false && getCurrentPlayer().cards.size() == 1)
+void Game::drawFiveCardsIfNotMakao()
+{
+    if (turn.saidMakao == false && getCurrentPlayer().cards.size() == 1 && turn.isCardPlaced)
     {
         if (deck.size() < 5)
             shuffleDeck();
         getCurrentPlayer().drawCards(deck, 5);
         //print(RED_F, "You didn't say makao! Drawed 5 cards \n");
     }
-    turn.nextTurn();
 }
 
 void Game::shuffleDeck()

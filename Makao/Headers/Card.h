@@ -4,7 +4,8 @@
 #include "options.h"
 #include <vector>
 
-#include "Turn.h"
+class Turn;
+
 
 // HACK: Symbole kart
 // czasami znaki specjalne nie wyświetlają się prawidłowo
@@ -92,12 +93,13 @@ public:
 	Card(const Card& card); // konstruktor kopiujący
 	Card(Symbol symbol, Figure figure); 
 
-	bool canCardBePlaced(CardDeck& cardsOnTable);
+	bool canCardBePlaced(CardDeck& cardsOnTable, const Turn& turn);
 
 
 private:
 	size_t generateId();
 	Color determineColor(Symbol symbol);
-
+	bool isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& turn);
+	bool isMachingCardOnTheTable(CardDeck& cardsOnTable);
 };
 

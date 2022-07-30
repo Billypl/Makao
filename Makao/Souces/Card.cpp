@@ -1,7 +1,8 @@
 #include "../Headers/includes.h"
+#include "../Headers/Card.h"
 #include <iostream>
+#include "../Headers/Turn.h"
 
-class Turn;
 using namespace std;
 
 Color Card::determineColor(Symbol symbol)
@@ -127,13 +128,25 @@ std::ostream& operator<<(std::ostream& cout, const Card& card)
 	return cout;
 }
 
-bool Card::canCardBePlaced(CardDeck& cardsOnTable)
+bool Card::canCardBePlaced(CardDeck& cardsOnTable, const Turn& turn)
 {
-	if (figure == Q || 
+	if (turn.isCardPlaced)
+		return isMachingCardPlacedInTheSameTurn(cardsOnTable, turn);
+	return isMachingCardOnTheTable(cardsOnTable);
+
+}
+
+bool Card::isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& turn)
+{
+	return cardsOnTable.back().figure == figure;
+}
+
+bool Card::isMachingCardOnTheTable(CardDeck& cardsOnTable)
+{
+	if (figure == Q ||
 		cardsOnTable.back().figure == Q ||
 		cardsOnTable.back().figure == figure ||
 		cardsOnTable.back().symbol == symbol)
 		return true;
-	else
-		return false;
+	return false;
 }
