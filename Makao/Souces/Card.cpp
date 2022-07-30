@@ -125,3 +125,13 @@ std::ostream& operator<<(std::ostream& cout, const Card& card)
 	return cout;
 }
 
+bool Card::canCardBePlaced(CardDeck& cardsOnTable)
+{
+	if (figure == Q || 
+		cardsOnTable.back().figure == Q ||
+		cardsOnTable.back().figure == figure ||
+		cardsOnTable.back().symbol == symbol)
+		return true;
+	else
+		return false;
+}

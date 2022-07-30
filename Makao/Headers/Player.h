@@ -17,6 +17,9 @@ public:
 	void printCards();
 	void printCoveredCards();
 
+	Player() {}
+	//Player(const Player& other) //copy constructor
+
 private:
 
 	void printUpperOfCards();

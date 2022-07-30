@@ -45,6 +45,12 @@ void Game::printTableCard()
     print(WHITE_B, "   \n\n\n\n");
 }
 
+Player& Game::getCurrentPlayer()
+{
+    return players[turn.currentPlayer];
+}
+
+
 
 void Game::startGame()
 {
@@ -108,7 +114,7 @@ Card Game::drawRandomStartingCard()
     Card randomCard;
     while(true)
     {
-        const int randomCardNumber = random::range(0, deck.size());
+        const int randomCardNumber = random::range(0, deck.size() - 1);
         randomCard = deck[randomCardNumber];
     	if(isSpecialCard(randomCard))
     		continue;
@@ -193,38 +199,65 @@ void Game::quit() { exit(0); }
 
 void Game::play()
 {
-    turn.isCardPlaced = true;
+    const int cardNumberToPutOnTable = waitForCardNumber();
+    if (cardNumberToPutOnTable == -1)
+        return;
 
-    const Card pickedCard = players[turn.currentPlayer].cards.back();
+    
+    const Card pickedCard = getCurrentPlayer().cards[cardNumberToPutOnTable-1];
     cardsOnTable.push_back(pickedCard);
-	players[turn.currentPlayer].cards.pop_back();
+	const int indexOfPickedCardOnPlayerHand = getCurrentPlayer().findCard(pickedCard);
+    getCurrentPlayer().cards.erase(next(getCurrentPlayer().cards.begin(), indexOfPickedCardOnPlayerHand));
+	turn.isCardPlaced = true;
+}
+
+int Game::waitForCardNumber()
+{
+    printTable();
+    if (canANYcardBePlaced() == false)
+        return -1;
+    while(true)
+    {
+        cout << "Choose number of the card you want to place: ";
+        int cardNumber;
+        cin >> cardNumber;
+        if (getCurrentPlayer().cards.size() < cardNumber)
+        {
+            print(RED_F, "You don't have so many cards to! Choose number of the card you have\n");
+            continue;
+        }
+
+        if (getCurrentPlayer().cards[cardNumber - 1].canCardBePlaced(cardsOnTable) == true)
+            return cardNumber;
+        else
+            print(RED_F, "This card can't be placed! Choose another\n");
+    }
+}
+bool Game::canANYcardBePlaced()
+{
+	for (const auto& card : getCurrentPlayer().cards)
+	{
+	    if (!card.canBePlaced)
+	        continue;
+	    return true;
+	}
+	return false;
 }
 
 void Game::grayOutCardsCannotBePlaced()
 {
-    for(auto& card : players[turn.currentPlayer].cards)
+    for(auto& card : getCurrentPlayer().cards)
     {
-        if(!canCardBePlaced(card))
+        if(!card.canCardBePlaced(cardsOnTable))
     		card.canBePlaced = false;
     }
 }
 
-bool Game::canCardBePlaced(Card& card)
-{
-    if (cardsOnTable.back().figure == card.figure ||
-        cardsOnTable.back().symbol == card.symbol ||
-        cardsOnTable.back().figure == Q)
-        return true;
-    else 
-        return false;
-}
-
 void Game::resetCardsState()
 {
-	for(auto& card : players[turn.currentPlayer].cards)
+	for(auto& card : getCurrentPlayer().cards)
         card.canBePlaced = true;
 }
-
 
 void Game::cheat()
 {
@@ -244,11 +277,11 @@ void Game::makao()
 void Game::end()
 {
     if (turn.isCardPlaced == false)
-        players[turn.currentPlayer].drawCards(deck, 1);
+        getCurrentPlayer().drawCards(deck, 1);
 
-    else if (turn.saidMakao == false && players[turn.currentPlayer].cards.size() == 1)
+    else if (turn.saidMakao == false && getCurrentPlayer().cards.size() == 1)
     {
-        players[turn.currentPlayer].drawCards(deck, 5);
+        getCurrentPlayer().drawCards(deck, 5);
         //print(RED_F, "You didn't say makao! Drawed 5 cards \n");
     }
 

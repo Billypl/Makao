@@ -23,6 +23,8 @@
 
 #endif
 
+class Card;
+typedef std::vector<Card> CardDeck;
 
 class CardParams
 {
@@ -86,6 +88,9 @@ public:
 	Card();
 	Card(const Card& card); // konstruktor kopiujący
 	Card(Symbol symbol, Figure figure); 
+
+	bool canCardBePlaced(CardDeck& cardsOnTable);
+
 
 private:
 	size_t generateId();

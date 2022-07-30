@@ -25,6 +25,9 @@ public:
 	void printTable();
 	void printCheatTable();
 
+	Player& getCurrentPlayer();
+
+
 	void quit();
 	void cheat();
 	void play();
@@ -47,10 +50,12 @@ private:
 
 	std::string waitForUserCommand();
 	void chooseCommandFunc(std::string command);
-	
+
 	void grayOutCardsCannotBePlaced();
-	bool canCardBePlaced(Card& card);
 	void resetCardsState();
-	
+
+	int waitForCardNumber();
+	bool canANYcardBePlaced();
+
 };
 

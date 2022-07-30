@@ -3,6 +3,13 @@
 #include "../Headers/includes.h"
 using namespace std;
 
+//Player::Player(const Player& other)
+//	: 
+//{
+//	
+//}
+
+
 void Player::drawCards(CardDeck& deck, int cardCount)
 {
 	for (int i = 0; i < cardCount; i++)
