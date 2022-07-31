@@ -132,7 +132,9 @@ bool Card::canCardBePlaced(CardDeck& cardsOnTable, const Turn& turn)
 {
 	if(turn.drawAmount != 0)
 	{
-		if ( isCardCounterFor_2(cardsOnTable) || isCardCounterFor_3(cardsOnTable))
+		if (!turn.isCardPlaced && is_2or_3(cardsOnTable) && (isCardCounterFor_2(cardsOnTable) || isCardCounterFor_3(cardsOnTable)))
+			return true;
+		if (isCardCounterFor_K(cardsOnTable))
 			return true;
 		return false;
 	}
@@ -155,9 +157,26 @@ bool Card::isCardCounterFor_3(CardDeck& cardsOnTable)
 		cardsOnTable.back().figure == _3 && figure == _2 && symbol == cardsOnTable.back().symbol;
 }
 
+bool Card::isCardCounterFor_K(CardDeck& cardsOnTable)
+{
+	if (cardsOnTable.back().figure == K && figure == K)
+		return true;
+	return false;
+}
+
+bool Card::is_2or_3(CardDeck& cardsOnTable)
+{
+	return cardsOnTable.back().figure == _2 || cardsOnTable.back().figure == _3;
+}
+
+bool Card::is_K(CardDeck& cardsOnTable)
+{
+	return cardsOnTable.back().figure == K && cardsOnTable.back().symbol == spades ||
+		cardsOnTable.back().figure == K && cardsOnTable.back().symbol == hearts;
+}
+
 bool Card::isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& turn)
 {
-	//return cardsOnTable.back().figure == figure;
 	return turn.lastPlacedCard.figure == figure;
 }
 
@@ -167,8 +186,6 @@ bool Card::isMachingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn)
 		return true;
 	return false;
 }
-
-
 
 bool Card::isStandard(CardDeck& cardsOnTable, const Turn& turn)
 {

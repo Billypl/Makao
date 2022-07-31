@@ -95,6 +95,8 @@ public:
 	Card(Symbol symbol, Figure figure); 
 
 	bool canCardBePlaced(CardDeck& cardsOnTable, const Turn& turn);
+	bool is_2or_3(CardDeck& cardsOnTable);
+	bool is_K(CardDeck& cardsOnTable);
 
 
 private:
@@ -104,6 +106,7 @@ private:
 	bool isMachingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn);
 	bool isCardCounterFor_2(CardDeck& cardsOnTable);
 	bool isCardCounterFor_3(CardDeck& cardsOnTable);
+	bool isCardCounterFor_K(CardDeck& cardsOnTable);
 	bool isStandard(CardDeck& cardsOnTable, const Turn& turn);
 };
 

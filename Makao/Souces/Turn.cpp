@@ -20,6 +20,13 @@ void Turn::incrementCurrentPlayerNumber()
 		currentPlayer = 0;
 }
 
+void Turn::decrementCurrentPlayerNumber()
+{
+	currentPlayer -= 2;
+	if (currentPlayer < 0)
+		currentPlayer = Game::PLAYERS_NUMBER + currentPlayer;
+}
+
 int Turn::incrementBotPickedNumber()
 {
 	int pickedOption = botPickedOption;

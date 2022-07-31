@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <string>
 
 #include "Card.h"
 #include "console.h"
@@ -29,3 +30,13 @@ public:
 	static int range(int rangeStart, int rangeEnd) { return (rand() % (rangeEnd + 1 - rangeStart) + rangeStart); }
 };
 
+inline int getIntFromUser()
+{
+	int num;
+	while (!(std::cin >> num)) {
+	    std::cin.clear(); //clear bad input flag
+	    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
+	    std::cout << "Invalid input; please re-enter.\n";
+	}
+	return num;
+}

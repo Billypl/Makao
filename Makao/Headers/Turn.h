@@ -15,12 +15,13 @@ public:
 	// returns current bot option number, then increments it
 	// something like botPickedOptions++
 	int incrementBotPickedNumber();
+	void incrementCurrentPlayerNumber();
+	void decrementCurrentPlayerNumber();
 
 	void nextTurn();
 	Turn();
 private:
 
 	int botPickedOption;
-	void incrementCurrentPlayerNumber();
 };
 

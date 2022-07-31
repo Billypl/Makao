@@ -1,5 +1,6 @@
 #include "../Headers/Game.h"
 #include "../Headers/Card.h"
+#include "../Headers/includes.h"
 #include <string>
 using namespace std;
 
@@ -73,11 +74,10 @@ void Game::setupGame()
 
 int Game::waitForPlayersNumber()
 {
-    int playersNumber;
     while (true)
     {
 	    cout << "Please insert number of players: ";
-        cin >> playersNumber;
+        int playersNumber = getIntFromUser();
         if (playersNumber < 2)
         {
             cout << "You need more players to play! \n";
@@ -94,11 +94,10 @@ int Game::waitForPlayersNumber()
 
 int Game::waitForBotsNumber()
 {
-    int realPlayers;
     while (true)
     {
         cout << "Please insert number of real players (played by user): ";
-        cin >> realPlayers;
+        int realPlayers = getIntFromUser();
         if (realPlayers < 1)
         {
             cout << "You need more players to play! Bots playing with themselves are boring! \n";
@@ -278,10 +277,12 @@ int Game::play()
     const Card pickedCard = getCurrentPlayer().cards[cardNumberToPutOnTable-1];
 
     // special cards _2 and _3
-    if(pickedCard.figure == _2 )
+    if(pickedCard.figure == _2)
         turn.drawAmount += 2;
     if (pickedCard.figure == _3)
         turn.drawAmount += 3;
+    if(pickedCard.figure == K && (pickedCard.symbol == spades || pickedCard.symbol == hearts))
+        turn.drawAmount += 5;
 
     // for requirements of special card AS
     turn.lastPlacedCard = pickedCard;
@@ -319,8 +320,6 @@ void Game::waitForPlayerToChooseSymbol()
         print(WHITE_B RED_F, DIAMONDS);
     	cout << " ): ";
 
-        int symbol;
-
         // bot block
         if (getCurrentPlayer().isBot)
         {
@@ -328,7 +327,7 @@ void Game::waitForPlayerToChooseSymbol()
         	return;
         }
 
-        cin >> symbol;
+        int symbol = getIntFromUser();
         if (As.size() < symbol)
         {
             print(RED_F, "There are only 4 aviable symbols\n");
@@ -352,10 +351,7 @@ void Game::changeDrawAmount()
         turn.drawAmount += 3;
 }
 
-bool Game::is_2or_3()
-{
-    return cardsOnTable.back().figure == _2 || cardsOnTable.back().figure == _3;
-}
+
 
 int Game::waitForCardNumber()
 {
@@ -373,7 +369,7 @@ int Game::waitForCardNumber()
         if (getCurrentPlayer().isBot)
             cardNumber = botCounter++;
         else
-			cin >> cardNumber;
+            cardNumber = getIntFromUser();
 
     	if (getCurrentPlayer().cards.size() < cardNumber)
         {
@@ -455,15 +451,27 @@ void Game::end()
         waitForPlayerToChooseSymbol();
 
     // special card _2 or _3
-    if (!turn.isCardPlaced && is_2or_3())
+    if (!turn.isCardPlaced && cardsOnTable.back().is_2or_3(cardsOnTable))
     {
         getCurrentPlayer().drawCards(deck, turn.drawAmount);
         turn.drawAmount = 0;
         turn.hasDrawnCard = true;
     }
+    // special card K
+    if (!turn.isCardPlaced && cardsOnTable.back().is_K(cardsOnTable))
+    {
+        getCurrentPlayer().drawCards(deck, turn.drawAmount);
+        turn.drawAmount = 0;
+        turn.hasDrawnCard = true;
+    }
+    if (turn.drawAmount != 0 && turn.hasDrawnCard)
+        turn.drawAmount++;
+
 	resetCardsState();
     drawCardIfHavent();
     drawFiveCardsIfNotMakao();
+    if (!turn.hasDrawnCard && turn.lastPlacedCard.symbol == spades && turn.lastPlacedCard.figure == K)
+        turn.decrementCurrentPlayerNumber();
     turn.nextTurn();
 }
 

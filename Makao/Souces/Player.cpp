@@ -10,6 +10,11 @@ void Player::drawCards(CardDeck& deck, int cardCount)
 {
 	for (int i = 0; i < cardCount; i++)
 	{
+		if (deck.empty())
+		{
+			print(RED_F, "There is no more cards!");
+			return;
+		}
 		int x = random::range(0, deck.size() - 1);
 		this->cards.push_back(deck[x]);
 		deck.erase(deck.begin() + x);
