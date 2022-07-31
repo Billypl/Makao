@@ -8,9 +8,12 @@ public:
 	int currentPlayer;
 	bool isCardPlaced;
 	bool saidMakao;
-	bool hasDrawedCard;
+	bool hasDrawnCard;
+	int drawAmount;
+	Card lastPlacedCard;
 
-	// returns current bot option number, then increments it 
+	// returns current bot option number, then increments it
+	// something like botPickedOptions++
 	int incrementBotPickedNumber();
 
 	void nextTurn();

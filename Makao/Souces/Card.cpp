@@ -130,10 +130,29 @@ std::ostream& operator<<(std::ostream& cout, const Card& card)
 
 bool Card::canCardBePlaced(CardDeck& cardsOnTable, const Turn& turn)
 {
+	if(turn.drawAmount != 0)
+	{
+		if ( isCardCounterFor_2(cardsOnTable) || isCardCounterFor_3(cardsOnTable))
+			return true;
+		return false;
+	}
+
 	if (turn.isCardPlaced)
 		return isMachingCardPlacedInTheSameTurn(cardsOnTable, turn);
-	return isMachingCardOnTheTable(cardsOnTable);
+	return isMachingCardOnTheTable(cardsOnTable, turn);
 
+}
+
+bool Card::isCardCounterFor_2(CardDeck& cardsOnTable)
+{
+	return cardsOnTable.back().figure == _2 && figure == _2 ||
+		cardsOnTable.back().figure == _2 && figure == _3 && symbol == cardsOnTable.back().symbol;
+}
+
+bool Card::isCardCounterFor_3(CardDeck& cardsOnTable)
+{
+	return cardsOnTable.back().figure == _3 && figure == _3 ||
+		cardsOnTable.back().figure == _3 && figure == _2 && symbol == cardsOnTable.back().symbol;
 }
 
 bool Card::isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& turn)
@@ -141,12 +160,19 @@ bool Card::isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& 
 	return cardsOnTable.back().figure == figure;
 }
 
-bool Card::isMachingCardOnTheTable(CardDeck& cardsOnTable)
+bool Card::isMachingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn)
 {
-	if (figure == Q ||
-		cardsOnTable.back().figure == Q ||
-		cardsOnTable.back().figure == figure ||
-		cardsOnTable.back().symbol == symbol)
+	if (isStandard(cardsOnTable))
 		return true;
 	return false;
+}
+
+
+
+bool Card::isStandard(CardDeck& cardsOnTable)
+{
+	return (figure == Q ||
+		cardsOnTable.back().figure == Q ||
+		cardsOnTable.back().figure == figure ||
+		cardsOnTable.back().symbol == symbol);
 }

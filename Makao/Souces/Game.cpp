@@ -273,11 +273,31 @@ int Game::play()
         return -1;
     
     const Card pickedCard = getCurrentPlayer().cards[cardNumberToPutOnTable-1];
+
+    // special cards _2 and _3
+    if(pickedCard.figure == _2 )
+        turn.drawAmount += 2;
+    if (pickedCard.figure == _3)
+        turn.drawAmount += 3;
+
     cardsOnTable.push_back(pickedCard);
 	const int indexOfPickedCardOnPlayerHand = getCurrentPlayer().findCard(pickedCard);
     getCurrentPlayer().cards.erase(next(getCurrentPlayer().cards.begin(), indexOfPickedCardOnPlayerHand));
 	turn.isCardPlaced = true;
     return 0;
+}
+
+void Game::changeDrawAmount()
+{
+    if (cardsOnTable.back().figure == _2)
+        turn.drawAmount += 2;
+    if (cardsOnTable.back().figure == _2)
+        turn.drawAmount += 3;
+}
+
+bool Game::is_2or_3()
+{
+    return cardsOnTable.back().figure == _2 || cardsOnTable.back().figure == _3;
 }
 
 int Game::waitForCardNumber()
@@ -308,7 +328,6 @@ int Game::waitForCardNumber()
             print(RED_F, "Card indexes stars from 1\n");
             continue;
         }
-
         if (getCurrentPlayer().cards[cardNumber - 1].canCardBePlaced(cardsOnTable, turn) == true)
             return cardNumber;
         else
@@ -359,11 +378,15 @@ void Game::makao()
 
 void Game::draw()
 {
-    if(turn.isCardPlaced == false && turn.hasDrawedCard == false)
+    if(turn.isCardPlaced == false && turn.hasDrawnCard == false)
     {
+        // special card _2 or _3
+        if(turn.drawAmount != 0)
+			turn.drawAmount--;
+
         if (deck.empty())
             shuffleDeck();
-        turn.hasDrawedCard = true;
+        turn.hasDrawnCard = true;
 		getCurrentPlayer().drawCards(deck, 1);
     }
 }
@@ -371,6 +394,12 @@ void Game::draw()
 // finish play command //canPlaceCard
 void Game::end()
 {
+    // special card _2 or _3
+    if (!turn.isCardPlaced && is_2or_3())
+    {
+        getCurrentPlayer().drawCards(deck, turn.drawAmount);
+        turn.drawAmount = 0;
+    }
 	resetCardsState();
     drawCardIfHavent();
     drawFiveCardsIfNotMakao();
@@ -379,7 +408,7 @@ void Game::end()
 
 void Game::drawCardIfHavent()
 {
-    if (turn.isCardPlaced == false && turn.hasDrawedCard == false)
+    if (turn.isCardPlaced == false && turn.hasDrawnCard == false)
     {
         if (deck.empty())
             shuffleDeck();
@@ -402,5 +431,3 @@ void Game::shuffleDeck()
     deck.insert(deck.end(), cardsOnTable.begin(), cardsOnTable.end() - 1);
 	cardsOnTable.erase(cardsOnTable.begin(), cardsOnTable.end() - 1);
 }
-
-

@@ -64,5 +64,8 @@ private:
 
 	void drawCardIfHavent();
 	void drawFiveCardsIfNotMakao();
+
+	void changeDrawAmount();
+	bool is_2or_3();
 };
 

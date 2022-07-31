@@ -100,6 +100,9 @@ private:
 	size_t generateId();
 	Color determineColor(Symbol symbol);
 	bool isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& turn);
-	bool isMachingCardOnTheTable(CardDeck& cardsOnTable);
+	bool isMachingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn);
+	bool isCardCounterFor_2(CardDeck& cardsOnTable);
+	bool isCardCounterFor_3(CardDeck& cardsOnTable);
+	bool isStandard(CardDeck& cardsOnTable);
 };
 
