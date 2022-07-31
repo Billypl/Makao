@@ -137,6 +137,15 @@ void Game::startGameLoop()
 {
     while(true)
     {
+        // needed just for game over screen
+        cls();
+        printTable();
+
+        if (getPlayersLeftCount() == 1)
+        {
+            print(GREEN_F, "\n\n\n GAME OVER \n\n\n");
+            quit();
+        }
         if (getCurrentPlayer().didWin())
             turn.nextTurn();
         cls();
@@ -144,6 +153,16 @@ void Game::startGameLoop()
         chooseCommandFunc(command);
     }
 }
+
+int Game::getPlayersLeftCount()
+{
+    int playersInGame = 0;
+	for (const auto& player : players)
+        if (player.cards.empty() == false)
+            playersInGame++;
+    return playersInGame;
+}
+
 
 string Game::waitForUserCommand()
 {

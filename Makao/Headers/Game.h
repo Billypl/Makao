@@ -36,6 +36,7 @@ public:
 	void makao();
 	void end();
 	void draw();
+	int getPlayersLeftCount();
 
 private:
 
