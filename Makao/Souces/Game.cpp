@@ -3,6 +3,7 @@
 using namespace std;
 
 int Game::PLAYERS_NUMBER;
+int Game::BOTS_NUMBER;
 
 void Game::printTable()
 {
@@ -51,7 +52,6 @@ Player& Game::getCurrentPlayer()
 }
 
 
-
 void Game::startGame()
 {
 	setupGame();
@@ -61,7 +61,8 @@ void Game::startGame()
 void Game::setupGame()
 {
     print(GREEN_F, "Welcome to makao game! \n");
-	PLAYERS_NUMBER = waitForPlayersNumber();
+    PLAYERS_NUMBER = waitForPlayersNumber();
+    BOTS_NUMBER = waitForBotsNumber();
     deck = Game::generateFullDeck();
     cardsOnTable.push_back(drawRandomStartingCard());
     players = createPlayers();
@@ -69,7 +70,7 @@ void Game::setupGame()
 
 int Game::waitForPlayersNumber()
 {
-    int playersNumber = 2;
+    int playersNumber;
     while (true)
     {
 	    cout << "Please insert number of players: ";
@@ -88,6 +89,28 @@ int Game::waitForPlayersNumber()
     }
 }
 
+int Game::waitForBotsNumber()
+{
+    int realPlayers;
+    while (true)
+    {
+        cout << "Please insert number of real players (played by user): ";
+        cin >> realPlayers;
+        if (realPlayers < 1)
+        {
+            cout << "You need more players to play! Bots playing with themselves are boring! \n";
+            continue;
+        }
+        if (realPlayers > 4)
+        {
+            cout << "Too much players! \n";
+            continue;
+        }
+        return PLAYERS_NUMBER - realPlayers;
+    }
+}
+
+
 CardDeck Game::generateFullDeck()
 {
     CardDeck cards;
@@ -99,12 +122,21 @@ CardDeck Game::generateFullDeck()
 
 vector<Player> Game::createPlayers()
 {
+    // create method creates 5 more users
     vector<Player> players;
-    for(int i = 0; i < PLAYERS_NUMBER; i++)
+    int i = 0;
+    for(i; i < PLAYERS_NUMBER - BOTS_NUMBER; i++)
     {
         Player player;
         player.drawCards(deck, STARTING_CARDS_NUMBER);
 	    players.push_back(player);
+    }
+    for (i; i < PLAYERS_NUMBER; i++)
+    {
+        Player player;
+        player.isBot = true;
+        player.drawCards(deck, STARTING_CARDS_NUMBER);
+        players.push_back(player);
     }
     return players;
 }
@@ -149,6 +181,8 @@ void Game::startGameLoop()
         if (getCurrentPlayer().didWin())
             turn.nextTurn();
         cls();
+
+
         string command = waitForUserCommand(); 
         chooseCommandFunc(command);
     }
@@ -171,7 +205,13 @@ string Game::waitForUserCommand()
     {
         printTable();
         cout << "Choose from commands: | quit | play | cheat | makao | end | draw | : ";
+
+        // bot block
+        if (getCurrentPlayer().isBot)
+            return commands[turn.incrementBotPickedNumber()];
+
         cin >> command;
+
         for(auto commandName : commands)
         {
             if(command == commandName)
@@ -201,7 +241,12 @@ void Game::chooseCommandFunc(string command)
     // TODO: finish play command
     if (command == "play")
     {
-        play();
+        do 
+        {
+            if (play() == -1)
+                return;
+        } while(getCurrentPlayer().isBot);
+
         return;
     }
     // TODO: finish end command
@@ -221,17 +266,18 @@ void Game::chooseCommandFunc(string command)
 
 void Game::quit() { exit(0); }
 
-void Game::play()
+int Game::play()
 {
     const int cardNumberToPutOnTable = waitForCardNumber();
     if (cardNumberToPutOnTable == -1)
-        return;
+        return -1;
     
     const Card pickedCard = getCurrentPlayer().cards[cardNumberToPutOnTable-1];
     cardsOnTable.push_back(pickedCard);
 	const int indexOfPickedCardOnPlayerHand = getCurrentPlayer().findCard(pickedCard);
     getCurrentPlayer().cards.erase(next(getCurrentPlayer().cards.begin(), indexOfPickedCardOnPlayerHand));
 	turn.isCardPlaced = true;
+    return 0;
 }
 
 int Game::waitForCardNumber()
@@ -239,14 +285,27 @@ int Game::waitForCardNumber()
     printTable();
     if (canANYcardBePlaced() == false)
         return -1;
+   
+    int botCounter = 1;
     while(true)
     {
         cout << "Choose number of the card you want to place: ";
         int cardNumber;
-        cin >> cardNumber;
-        if (getCurrentPlayer().cards.size() < cardNumber)
+
+        // bot block
+        if (getCurrentPlayer().isBot)
+            cardNumber = botCounter++;
+        else
+			cin >> cardNumber;
+
+    	if (getCurrentPlayer().cards.size() < cardNumber)
         {
             print(RED_F, "You don't have so many cards to! Choose number of the card you have\n");
+            continue;
+        }
+        if (1 > cardNumber)
+        {
+            print(RED_F, "Card indexes stars from 1\n");
             continue;
         }
 
@@ -302,6 +361,8 @@ void Game::draw()
 {
     if(turn.isCardPlaced == false && turn.hasDrawedCard == false)
     {
+        if (deck.empty())
+            shuffleDeck();
         turn.hasDrawedCard = true;
 		getCurrentPlayer().drawCards(deck, 1);
     }
@@ -333,7 +394,6 @@ void Game::drawFiveCardsIfNotMakao()
         if (deck.size() < 5)
             shuffleDeck();
         getCurrentPlayer().drawCards(deck, 5);
-        //print(RED_F, "You didn't say makao! Drawed 5 cards \n");
     }
 }
 

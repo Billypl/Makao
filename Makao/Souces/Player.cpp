@@ -3,6 +3,9 @@
 #include "../Headers/includes.h"
 using namespace std;
 
+Player::Player()
+	: isBot(false) {}
+
 void Player::drawCards(CardDeck& deck, int cardCount)
 {
 	for (int i = 0; i < cardCount; i++)

@@ -15,11 +15,13 @@ class Game
 	CardDeck deck;
 	CardDeck cardsOnTable;
 	Turn turn;
-	std::array<std::string, 6> commands = { "quit", "play", "cheat", "makao", "end", "draw"};
+	std::array<std::string, 6> commands = { "play", "makao", "end", "draw", "cheat", "quit" };
 
 public:
 
 	static int PLAYERS_NUMBER;
+	static int BOTS_NUMBER;
+
 	void startGame();
 
 	void printTable();
@@ -27,12 +29,10 @@ public:
 
 	Player& getCurrentPlayer();
 
-
 	void quit();
 	void cheat();
-	void play();
+	int play();
 
-	//std::string waitForCardToChoose();
 	void makao();
 	void end();
 	void draw();
@@ -44,6 +44,7 @@ private:
 
 	void setupGame();
 	int waitForPlayersNumber();
+	int waitForBotsNumber();
 	static CardDeck generateFullDeck();
 	std::vector<Player> createPlayers();
 	Card drawRandomStartingCard();

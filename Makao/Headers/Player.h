@@ -6,6 +6,7 @@ class Player
 public:
 
 	CardDeck cards;
+	bool isBot;
 
 	// dobierz karty
 	void drawCards(CardDeck& deck, int cardCount);
@@ -18,7 +19,7 @@ public:
 	void printCoveredCards();
 	bool didWin();
 
-	Player() {}
+	Player();
 
 private:
 
