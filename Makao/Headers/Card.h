@@ -17,6 +17,7 @@ class Turn;
 #define DIAMONDS	"♦"
 #define HEARTS		"♥"
 #define SPADES		"♠"
+#define SYMBOL_LENGTH " "
 
 #else
 
@@ -24,7 +25,7 @@ class Turn;
 #define DIAMONDS	"_d"
 #define HEARTS		"_h"
 #define SPADES		"_s"
-
+#define SYMBOL_LENGTH "  "
 #endif
 
 class Card;
@@ -103,6 +104,6 @@ private:
 	bool isMachingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn);
 	bool isCardCounterFor_2(CardDeck& cardsOnTable);
 	bool isCardCounterFor_3(CardDeck& cardsOnTable);
-	bool isStandard(CardDeck& cardsOnTable);
+	bool isStandard(CardDeck& cardsOnTable, const Turn& turn);
 };
 

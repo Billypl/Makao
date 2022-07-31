@@ -157,22 +157,23 @@ bool Card::isCardCounterFor_3(CardDeck& cardsOnTable)
 
 bool Card::isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& turn)
 {
-	return cardsOnTable.back().figure == figure;
+	//return cardsOnTable.back().figure == figure;
+	return turn.lastPlacedCard.figure == figure;
 }
 
 bool Card::isMachingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn)
 {
-	if (isStandard(cardsOnTable))
+	if (isStandard(cardsOnTable, turn))
 		return true;
 	return false;
 }
 
 
 
-bool Card::isStandard(CardDeck& cardsOnTable)
+bool Card::isStandard(CardDeck& cardsOnTable, const Turn& turn)
 {
 	return (figure == Q ||
-		cardsOnTable.back().figure == Q ||
-		cardsOnTable.back().figure == figure ||
-		cardsOnTable.back().symbol == symbol);
+		turn.lastPlacedCard.figure == Q ||
+		turn.lastPlacedCard.figure == figure ||
+		turn.lastPlacedCard.symbol == symbol);
 }

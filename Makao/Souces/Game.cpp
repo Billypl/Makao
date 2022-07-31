@@ -1,4 +1,5 @@
 #include "../Headers/Game.h"
+#include "../Headers/Card.h"
 #include <string>
 using namespace std;
 
@@ -43,7 +44,8 @@ void Game::printTableCard()
 {
     const string BORDER_GAP = "\t\t";
     cout << "\n\n" << BORDER_GAP << cardsOnTable.back() << endl << BORDER_GAP;
-    print(WHITE_B, "   \n\n\n\n");
+    print(WHITE_B, "  " + (string)SYMBOL_LENGTH);
+    cout << "\n\n\n\n";
 }
 
 Player& Game::getCurrentPlayer()
@@ -65,6 +67,7 @@ void Game::setupGame()
     BOTS_NUMBER = waitForBotsNumber();
     deck = Game::generateFullDeck();
     cardsOnTable.push_back(drawRandomStartingCard());
+    turn.lastPlacedCard = cardsOnTable.back();
     players = createPlayers();
 }
 
@@ -280,11 +283,65 @@ int Game::play()
     if (pickedCard.figure == _3)
         turn.drawAmount += 3;
 
+    // for requirements of special card AS
+    turn.lastPlacedCard = pickedCard;
+
     cardsOnTable.push_back(pickedCard);
 	const int indexOfPickedCardOnPlayerHand = getCurrentPlayer().findCard(pickedCard);
     getCurrentPlayer().cards.erase(next(getCurrentPlayer().cards.begin(), indexOfPickedCardOnPlayerHand));
 	turn.isCardPlaced = true;
+
     return 0;
+}
+
+void Game::waitForPlayerToChooseSymbol()
+{
+    cls();
+    printTable();
+
+    array<Card, 4> As =
+    {
+        Card(clubs, A),
+        Card(spades, A),
+        Card(hearts, A),
+        Card(diamonds, A)
+    };
+
+    while (true)
+    {
+        cout << "Choose number of the of the aviable symbols ( ";
+        print(WHITE_B BLACK_F, CLUBS);
+        cout << " ";
+        print(WHITE_B BLACK_F, SPADES);
+        cout << " ";
+        print(WHITE_B RED_F, HEARTS);
+        cout << " ";
+        print(WHITE_B RED_F, DIAMONDS);
+    	cout << " ): ";
+
+        int symbol;
+
+        // bot block
+        if (getCurrentPlayer().isBot)
+        {
+            turn.lastPlacedCard = As[random::range(0, 3)];
+        	return;
+        }
+
+        cin >> symbol;
+        if (As.size() < symbol)
+        {
+            print(RED_F, "There are only 4 aviable symbols\n");
+            continue;
+        }
+        if (1 > symbol)
+        {
+            print(RED_F, "Symbol indexes stars from 1\n");
+            continue;
+        }
+        turn.lastPlacedCard = As[symbol - 1];
+        return;
+    }
 }
 
 void Game::changeDrawAmount()
@@ -394,11 +451,15 @@ void Game::draw()
 // finish play command //canPlaceCard
 void Game::end()
 {
+    if (turn.lastPlacedCard.figure == A && turn.isCardPlaced)
+        waitForPlayerToChooseSymbol();
+
     // special card _2 or _3
     if (!turn.isCardPlaced && is_2or_3())
     {
         getCurrentPlayer().drawCards(deck, turn.drawAmount);
         turn.drawAmount = 0;
+        turn.hasDrawnCard = true;
     }
 	resetCardsState();
     drawCardIfHavent();

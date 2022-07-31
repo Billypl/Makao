@@ -67,5 +67,8 @@ private:
 
 	void changeDrawAmount();
 	bool is_2or_3();
+
+	void waitForPlayerToChooseSymbol();
+
 };
 

@@ -63,9 +63,9 @@ void Player::printBottomOfCards()
 	for (const auto& card : cards)
 	{
 		if(card.canBePlaced)
-			print(WHITE_B, "   ");
+			print(WHITE_B, "  " + (string)SYMBOL_LENGTH);
 		else
-			print(GRAY_B, "   ");
+			print(GRAY_B, "  " + (string)SYMBOL_LENGTH);
 		cout << " ";
 	}
 	cout << endl;
