@@ -64,6 +64,14 @@ void Game::startGame()
 void Game::setupGame()
 {
     print(GREEN_F, "Welcome to makao game! \n");
+    cout << "There are 6 commands you need to know: \n";
+    cout << "quit - exits the program \n";
+    cout << "play - let's you (if there are any available) choose a card\n";
+    cout << "makao - can be used when user have 1 card\n";
+    cout << "cheat - shows all cards\n";
+    cout << "draw - lets you draw 1 card\n";
+    cout << "end - ends your trurn and draws card/cards if you didn't\n";
+
     PLAYERS_NUMBER = waitForPlayersNumber();
     BOTS_NUMBER = waitForBotsNumber();
     deck = Game::generateFullDeck();
