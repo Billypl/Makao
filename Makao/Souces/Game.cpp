@@ -459,14 +459,14 @@ void Game::end()
         waitForPlayerToChooseSymbol();
 
     // special card _2 or _3
-    if (!turn.isCardPlaced && cardsOnTable.back().is_2or_3(cardsOnTable))
+    if (!turn.isCardPlaced && cardsOnTable.back().is_2or_3(cardsOnTable) && turn.drawAmount != 0)
     {
         getCurrentPlayer().drawCards(deck, turn.drawAmount);
         turn.drawAmount = 0;
         turn.hasDrawnCard = true;
     }
     // special card K
-    if (!turn.isCardPlaced && cardsOnTable.back().is_K(cardsOnTable))
+    if (!turn.isCardPlaced && cardsOnTable.back().is_K(cardsOnTable) && turn.drawAmount!=0)
     {
         getCurrentPlayer().drawCards(deck, turn.drawAmount);
         turn.drawAmount = 0;
@@ -478,7 +478,7 @@ void Game::end()
 	resetCardsState();
     drawCardIfHavent();
     drawFiveCardsIfNotMakao();
-    if (!turn.hasDrawnCard && turn.lastPlacedCard.symbol == spades && turn.lastPlacedCard.figure == K)
+    if (turn.drawAmount !=0 && !turn.hasDrawnCard && turn.lastPlacedCard.symbol == spades && turn.lastPlacedCard.figure == K)
         turn.decrementCurrentPlayerNumber();
     turn.nextTurn();
 }

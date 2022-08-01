@@ -5,6 +5,7 @@
 #include <vector>
 
 class Turn;
+class Card;
 
 
 // HACK: Symbole kart
@@ -28,12 +29,12 @@ class Turn;
 #define SYMBOL_LENGTH "  "
 #endif
 
-class Card;
 typedef std::vector<Card> CardDeck;
 
 class CardParams
 {
 public:
+
 
 	enum class Symbol
 	{
@@ -78,7 +79,6 @@ class Card : public CardParams
 {
 
 public:
-
 	bool operator== (const Card& other) const;
 	friend std::ostream& operator<< (std::ostream& cout, Figure figure);
 	friend std::ostream& operator<< (std::ostream& cout, Symbol symbol);

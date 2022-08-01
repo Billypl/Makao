@@ -6,13 +6,13 @@
 
 using namespace std;
 
+
 int main()
 {
     random rng;
 
     Game game;
     game.startGame();
-
 
     cout << "Works?";
 }

@@ -49,6 +49,7 @@ private:
 	std::vector<Player> createPlayers();
 	Card drawRandomStartingCard();
 	bool isSpecialCard(Card randomCard);
+
 	void startGameLoop();
 
 	std::string waitForUserCommand();

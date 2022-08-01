@@ -132,6 +132,8 @@ bool Card::canCardBePlaced(CardDeck& cardsOnTable, const Turn& turn)
 {
 	if(turn.drawAmount != 0)
 	{
+		if (turn.isCardPlaced && turn.lastPlacedCard.figure == figure)
+			return true;
 		if (!turn.isCardPlaced && is_2or_3(cardsOnTable) && (isCardCounterFor_2(cardsOnTable) || isCardCounterFor_3(cardsOnTable)))
 			return true;
 		if (isCardCounterFor_K(cardsOnTable))
