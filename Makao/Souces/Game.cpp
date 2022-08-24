@@ -61,23 +61,30 @@ void Game::startGame()
     startGameLoop();
 }
 
+void printWelcomeScreen();
 void Game::setupGame()
 {
-    print(GREEN_F, "Welcome to makao game! \n");
-    cout << "There are 6 commands you need to know: \n";
-    cout << "quit - exits the program \n";
-    cout << "play - let's you (if there are any available) choose a card\n";
-    cout << "makao - can be used when user have 1 card\n";
-    cout << "cheat - shows all cards\n";
-    cout << "draw - lets you draw 1 card\n";
-    cout << "end - ends your trurn and draws card/cards if you didn't\n";
-
+    printWelcomeScreen();
     PLAYERS_NUMBER = waitForPlayersNumber();
     BOTS_NUMBER = waitForBotsNumber();
     deck = Game::generateFullDeck();
     cardsOnTable.push_back(drawRandomStartingCard());
     turn.lastPlacedCard = cardsOnTable.back();
     players = createPlayers();
+}
+
+void printWelcomeScreen()
+{
+    print(GREEN_F, "Welcome to makao game! \n\n");
+    cout << YELLOW_F;
+    cout << "There are 6 commands you need to know: \n";
+    cout << "quit - exits the program \n";
+    cout << "play - let's you (if there are any available) choose a card\n";
+    cout << "makao - can be used when user have 1 card\n";
+    cout << "cheat - shows all cards\n";
+    cout << "draw - lets you draw 1 card\n";
+    cout << "end - ends your turn and draws card/cards if you didn't\n\n";
+    cout << DEFAULT_F;
 }
 
 int Game::waitForPlayersNumber()
@@ -291,6 +298,8 @@ int Game::play()
         turn.drawAmount += 3;
     if(pickedCard.figure == K && (pickedCard.symbol == spades || pickedCard.symbol == hearts))
         turn.drawAmount += 5;
+    if (pickedCard.figure == K && (pickedCard.symbol == diamonds || pickedCard.symbol == clubs))
+        turn.drawAmount = 0;
 
     // for requirements of special card AS
     turn.lastPlacedCard = pickedCard;
@@ -434,12 +443,12 @@ void Game::makao()
 {
     if (turn.isCardPlaced == false)
         return;
-    turn.saidMakao = true;
+    turn.isMakaoSaid = true;
 }
 
 void Game::draw()
 {
-    if(turn.isCardPlaced == false && turn.hasDrawnCard == false)
+    if(turn.isCardPlaced == false && turn.isCardDrawn == false)
     {
         // special card _2 or _3
         if(turn.drawAmount != 0)
@@ -447,7 +456,7 @@ void Game::draw()
 
         if (deck.empty())
             shuffleDeck();
-        turn.hasDrawnCard = true;
+        turn.isCardDrawn = true;
 		getCurrentPlayer().drawCards(deck, 1);
     }
 }
@@ -463,29 +472,29 @@ void Game::end()
     {
         getCurrentPlayer().drawCards(deck, turn.drawAmount);
         turn.drawAmount = 0;
-        turn.hasDrawnCard = true;
+        turn.isCardDrawn = true;
     }
     // special card K
-    if (!turn.isCardPlaced && cardsOnTable.back().is_K(cardsOnTable) && turn.drawAmount!=0)
+    if (!turn.isCardPlaced && cardsOnTable.back().isSpecial_K(cardsOnTable) && turn.drawAmount!=0)
     {
         getCurrentPlayer().drawCards(deck, turn.drawAmount);
         turn.drawAmount = 0;
-        turn.hasDrawnCard = true;
+        turn.isCardDrawn = true;
     }
-    if (turn.drawAmount != 0 && turn.hasDrawnCard)
-        turn.drawAmount++;
+    if (turn.drawAmount != 0 && turn.isCardDrawn)
+		turn.drawAmount++;
 
 	resetCardsState();
     drawCardIfHavent();
     drawFiveCardsIfNotMakao();
-    if (turn.drawAmount !=0 && !turn.hasDrawnCard && turn.lastPlacedCard.symbol == spades && turn.lastPlacedCard.figure == K)
+    if (turn.drawAmount !=0 && !turn.isCardDrawn && turn.lastPlacedCard.symbol == spades && turn.lastPlacedCard.figure == K)
         turn.decrementCurrentPlayerNumber();
     turn.nextTurn();
 }
 
 void Game::drawCardIfHavent()
 {
-    if (turn.isCardPlaced == false && turn.hasDrawnCard == false)
+    if (turn.isCardPlaced == false && turn.isCardDrawn == false)
     {
         if (deck.empty())
             shuffleDeck();
@@ -495,7 +504,7 @@ void Game::drawCardIfHavent()
 
 void Game::drawFiveCardsIfNotMakao()
 {
-    if (turn.saidMakao == false && getCurrentPlayer().cards.size() == 1 && turn.isCardPlaced)
+    if (turn.isMakaoSaid == false && getCurrentPlayer().cards.size() == 1 && turn.isCardPlaced)
     {
         if (deck.size() < 5)
             shuffleDeck();

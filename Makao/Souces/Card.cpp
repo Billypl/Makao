@@ -7,12 +7,11 @@ using namespace std;
 
 Color Card::determineColor(Symbol symbol)
 {
-	if (symbol == Symbol::clubs || symbol == Symbol::spades)
+	if (symbol == clubs || symbol == spades)
 		return Color::black;
 	else
 		return Color::red;
 }
-
 
 size_t Card::generateId()
 {
@@ -128,23 +127,42 @@ std::ostream& operator<<(std::ostream& cout, const Card& card)
 	return cout;
 }
 
+
+bool isNeedToDrawCard(const Turn& turn);
+bool canAnotherSpecialCardBePlaced(const Turn& turn, const Card& card);
+bool canPlayerDefend(CardDeck& cardsOnTable, const Turn& turn, const Card& card);
 bool Card::canCardBePlaced(CardDeck& cardsOnTable, const Turn& turn)
 {
-	if(turn.drawAmount != 0)
+	if(isNeedToDrawCard(turn))
 	{
-		if (turn.isCardPlaced && turn.lastPlacedCard.figure == figure)
+		if (canAnotherSpecialCardBePlaced(turn, *this))
 			return true;
-		if (!turn.isCardPlaced && is_2or_3(cardsOnTable) && (isCardCounterFor_2(cardsOnTable) || isCardCounterFor_3(cardsOnTable)))
-			return true;
-		if (isCardCounterFor_K(cardsOnTable))
+		if (canPlayerDefend(cardsOnTable, turn, *this))
 			return true;
 		return false;
 	}
-
 	if (turn.isCardPlaced)
-		return isMachingCardPlacedInTheSameTurn(cardsOnTable, turn);
-	return isMachingCardOnTheTable(cardsOnTable, turn);
+		return isMatchingCardPlacedInTheSameTurn(turn);
+	return isMatchingCardOnTheTable(cardsOnTable, turn);
 
+}
+
+bool isNeedToDrawCard(const Turn& turn)
+{
+	return turn.drawAmount != 0;
+}
+
+bool canAnotherSpecialCardBePlaced(const Turn& turn, const Card& card)
+{
+	return turn.isCardPlaced && turn.lastPlacedCard.figure == card.figure;
+}
+
+bool canPlayerDefend(CardDeck& cardsOnTable, const Turn& turn, Card& card)
+{
+	return !turn.isCardPlaced && (
+		(card.is_2or_3(cardsOnTable) && (card.isCardCounterFor_2(cardsOnTable) || card.isCardCounterFor_3(cardsOnTable))) ||
+		(card.isCardCounterFor_K(cardsOnTable))
+		);
 }
 
 bool Card::isCardCounterFor_2(CardDeck& cardsOnTable)
@@ -161,9 +179,7 @@ bool Card::isCardCounterFor_3(CardDeck& cardsOnTable)
 
 bool Card::isCardCounterFor_K(CardDeck& cardsOnTable)
 {
-	if (cardsOnTable.back().figure == K && figure == K)
-		return true;
-	return false;
+	return cardsOnTable.back().figure == K && figure == K;
 }
 
 bool Card::is_2or_3(CardDeck& cardsOnTable)
@@ -171,22 +187,20 @@ bool Card::is_2or_3(CardDeck& cardsOnTable)
 	return cardsOnTable.back().figure == _2 || cardsOnTable.back().figure == _3;
 }
 
-bool Card::is_K(CardDeck& cardsOnTable)
+bool Card::isSpecial_K(CardDeck& cardsOnTable)
 {
 	return cardsOnTable.back().figure == K && cardsOnTable.back().symbol == spades ||
 		cardsOnTable.back().figure == K && cardsOnTable.back().symbol == hearts;
 }
 
-bool Card::isMachingCardPlacedInTheSameTurn(CardDeck& cardsOnTable, const Turn& turn)
+bool Card::isMatchingCardPlacedInTheSameTurn(const Turn& turn)
 {
 	return turn.lastPlacedCard.figure == figure;
 }
 
-bool Card::isMachingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn)
+bool Card::isMatchingCardOnTheTable(CardDeck& cardsOnTable, const Turn& turn)
 {
-	if (isStandard(cardsOnTable, turn))
-		return true;
-	return false;
+	return isStandard(cardsOnTable, turn);
 }
 
 bool Card::isStandard(CardDeck& cardsOnTable, const Turn& turn)

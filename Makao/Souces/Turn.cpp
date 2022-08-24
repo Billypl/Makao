@@ -4,14 +4,14 @@
 void Turn::nextTurn()
 {
 	isCardPlaced = false;
-	saidMakao = false;
-	hasDrawnCard = false;
+	isMakaoSaid = false;
+	isCardDrawn = false;
 	incrementCurrentPlayerNumber();
 	cls();
 }
 
 Turn::Turn()
-	: currentPlayer(0), isCardPlaced(false), saidMakao(false), hasDrawnCard(false), botPickedOption(0)  {}
+	: currentPlayer(0), isCardPlaced(false), isMakaoSaid(false), isCardDrawn(false), botPickedOption(0)  {}
 
 void Turn::incrementCurrentPlayerNumber()
 {

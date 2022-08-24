@@ -7,8 +7,8 @@ public:
 
 	int currentPlayer;
 	bool isCardPlaced;
-	bool saidMakao;
-	bool hasDrawnCard;
+	bool isMakaoSaid;
+	bool isCardDrawn;
 	int drawAmount;
 	Card lastPlacedCard;
 
@@ -20,6 +20,7 @@ public:
 
 	void nextTurn();
 	Turn();
+
 private:
 
 	int botPickedOption;

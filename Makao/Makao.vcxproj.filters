@@ -21,9 +21,6 @@
     <ClCompile Include="Souces\Card.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Souces\Draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Headers\console.h">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -42,9 +39,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\includes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\options.h">

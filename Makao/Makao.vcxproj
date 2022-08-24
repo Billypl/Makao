@@ -143,14 +143,12 @@
     <ClCompile Include="Headers\console.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Souces\Card.cpp" />
-    <ClCompile Include="Souces\Draw.cpp" />
     <ClCompile Include="Souces\Game.cpp" />
     <ClCompile Include="Souces\Player.cpp" />
     <ClCompile Include="Souces\Turn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Card.h" />
-    <ClInclude Include="Headers\Draw.h" />
     <ClInclude Include="Headers\Game.h" />
     <ClInclude Include="Headers\includes.h" />
     <ClInclude Include="Headers\options.h" />
